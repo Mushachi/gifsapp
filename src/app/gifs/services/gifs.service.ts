@@ -20,7 +20,12 @@ export class GifsService {
   private apiKey: string = 'i3CcKRdfhUyt3oYU20Znn00m7PCsewDW';
   private serviceUrl: string = 'http://api.giphy.com/v1/gifs';
 
-  constructor( private http: HttpClient ) { }
+  constructor( private http: HttpClient ) {
+    this.loadLocalStorage();
+
+    this.searchTag(this._tagsHistory[0]);
+    console.log('Gifs Service Ready');
+   }
 
   get tagsHistory() {
     return [...this._tagsHistory];
@@ -35,6 +40,7 @@ export class GifsService {
 
     this._tagsHistory.unshift( tag );
     this._tagsHistory = this.tagsHistory.splice(0,10);
+    this.saveLocalStorage();
   }
 
   searchTag2( tag: string ):void {
@@ -64,6 +70,16 @@ export class GifsService {
     const resp = await fetch('http://api.giphy.com/v1/gifs/search?api_key=i3CcKRdfhUyt3oYU20Znn00m7PCsewDW&q=goku&limit=10');
     const data = await resp.json();
     console.log(data);
+  }
+
+  private saveLocalStorage():void {
+    localStorage.setItem('history', JSON.stringify(this.tagsHistory));
+  }
+
+  private loadLocalStorage():void {
+    if( !localStorage.getItem('history') ) return;
+
+    this._tagsHistory = JSON.parse( localStorage.getItem('history')! );
   }
 
   async searchTag( tag: string ):Promise<void> {
