@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
+import { Gif, SearchResponse } from '../interfaces/gifs.interfaces';
+
 // const TENOR_API_KEY = 'AIzaSyD6VlY2SH8kOJEFwhnlkrn44WIg0XKnHk0';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GifsService {
+
+  public gifList: Gif[] = [];
 
   private _tagsHistory: string[] = [];
   // Desde API Tenor https://developers.google.com/tenor/guides/quickstart?hl=es-419
@@ -71,9 +75,13 @@ export class GifsService {
       .set('limit', '10' )
       .set('q', tag )
 
-    this.http.get(`${ this.serviceUrl }/search`, { params: params })
-      .subscribe( resp=> {
-        console.log(resp);
+    this.http.get<SearchResponse>(`${ this.serviceUrl }/search`, { params: params })
+      .subscribe( resp => {
+
+        this.gifList = resp.data;
+
+        // console.log(resp);
+        // console.log({ gifs: this.gifList });
       });
   }
 
