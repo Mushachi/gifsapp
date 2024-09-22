@@ -69,7 +69,7 @@ export class GifsService {
 
     const resp = await fetch('http://api.giphy.com/v1/gifs/search?api_key=i3CcKRdfhUyt3oYU20Znn00m7PCsewDW&q=goku&limit=10');
     const data = await resp.json();
-    console.log(data);
+    // console.log(data);
   }
 
   private saveLocalStorage():void {
